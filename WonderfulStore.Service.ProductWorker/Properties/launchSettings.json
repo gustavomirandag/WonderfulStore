@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "WonderfulStore.Service.ProductWorker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

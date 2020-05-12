@@ -127,10 +127,4 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\WonderfulStore.UI.CrossPlatformApp\WonderfulStore.UI.CrossPlatformApp.csproj">
-      <Project>{EE7CE44C-0075-4E7F-959B-34F9166067BE}</Project>
-      <Name>WonderfulStore.UI.CrossPlatformApp</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
