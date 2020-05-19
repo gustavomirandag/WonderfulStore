@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using WonderfulStore.Application.Cqrs.Commands;
+using WonderfulStore.Domain.Services;
 
 namespace WonderfulStore.Application.Cqrs.Handlers
 {
     public class ProductCommandHandler
     {
-        public async Task HandleAsync(AddProductCommand command)
+        private ProductService _productService;
+
+        public ProductCommandHandler(ProductService productService)
+        {
+            _productService = productService;
+        }
+
+        public void Handle(AddProductCommand command)
         {
             //Chama a implementação do Caso de Uso que está
             //no Building Block de serviço
-            throw new NotImplementedException();
+            _productService.AddProduct(command.Product);
         }
 
-        public async Task HandleAsync(UpdateProductCommand command)
+        public void Handle(UpdateProductCommand command)
         {
-            throw new NotImplementedException();
+            _productService.UpdateProduct(command.Product);
         }
     }
 }

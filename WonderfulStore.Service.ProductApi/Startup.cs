@@ -1,15 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using WonderfulStore.Application;
+using WonderfulStore.Application.Interfaces;
+using WonderfulStore.Application.Models.Interfaces;
+using WonderfulStore.Domain.Interfaces.Repositories;
+using WonderfulStore.Infra.DataAccess.Contexts;
+using WonderfulStore.Infra.DataAccess.Repositories;
+using WonderfulStore.Infra.Messaging;
 
 namespace WonderfulStore.Service.ProductApi
 {
@@ -26,6 +27,10 @@ namespace WonderfulStore.Service.ProductApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<DbContext, WonderfulStoreContext>();
+            services.AddScoped<IProductRepository, ProductSqlServerRepository>();
+            services.AddScoped<IMediatorHandler, AzureServiceBusQueue>();
+            services.AddScoped<IProductApiApp, ProductApiApp>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

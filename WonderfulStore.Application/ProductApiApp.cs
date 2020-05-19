@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WonderfulStore.Application.Cqrs.Commands;
+using WonderfulStore.Application.Interfaces;
 using WonderfulStore.Application.Models.Interfaces;
 using WonderfulStore.Domain.Entities;
 using WonderfulStore.Domain.Interfaces.Repositories;
 
 namespace WonderfulStore.Application
 {
-    public class ProductApiApp
+    public class ProductApiApp : IProductApiApp
     {
         private readonly IMediatorHandler _bus;
         private readonly IProductRepository _productRepository;
@@ -31,7 +30,7 @@ namespace WonderfulStore.Application
         }
         //########################################
 
-        
+
         //############# QUERIES ##############
         public IEnumerable<Product> GetAllProducts()
         {

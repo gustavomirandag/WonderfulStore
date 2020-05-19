@@ -4,5 +4,16 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WonderfulStore.Application\WonderfulStore.Application.csproj" />
+    <ProjectReference Include="..\WonderfulStore.Domain\WonderfulStore.Domain.csproj" />
+    <ProjectReference Include="..\WonderfulStore.Infra.DataAccess\WonderfulStore.Infra.DataAccess.csproj" />
+    <ProjectReference Include="..\WonderfulStore.Infra.Messaging\WonderfulStore.Infra.Messaging.csproj" />
+  </ItemGroup>
+
 
 </Project>
