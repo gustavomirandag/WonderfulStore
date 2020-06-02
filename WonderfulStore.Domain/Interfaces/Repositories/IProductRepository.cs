@@ -5,14 +5,7 @@ using WonderfulStore.Domain.Entities;
 
 namespace WonderfulStore.Domain.Interfaces.Repositories
 {
-    public interface IProductRepository
+    public interface IProductRepository : IRepository<Guid,Product>
     {
-        //Repositório é APENAS um CRUD
-        void Create(Product product);
-        IEnumerable<Product> ReadAll();
-        Product ReadById(Guid id);
-        void Update(Product product);
-        void Delete(Guid id);
-        void SaveChanges();
     }
 }

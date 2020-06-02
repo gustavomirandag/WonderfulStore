@@ -14,6 +14,7 @@ using WonderfulStore.Domain.Interfaces.Repositories;
 using WonderfulStore.Infra.DataAccess.Repositories;
 using WonderfulStore.Infra.DataAccess.Contexts;
 using WonderfulStore.Service.ProductWorker.Properties;
+using WonderfulStore.Infra.DataAccess;
 
 namespace WonderfulStore.Service.ProductWorker
 {
@@ -23,12 +24,14 @@ namespace WonderfulStore.Service.ProductWorker
         static async Task Main()
         {
             //Fake Dependency Injection
+            var wonderfulStoreContext = new WonderfulStoreContext();
             Functions.ProductWorkerApp =
                 new ProductWorkerApp(
                     new ProductCommandHandler(
                         new ProductService(
+                            new UnitOfWork(wonderfulStoreContext),
                             new ProductSqlServerRepository(
-                                new WonderfulStoreContext())
+                                wonderfulStoreContext)
                             )));
             var builder = new HostBuilder();
             builder.ConfigureWebJobs(b =>

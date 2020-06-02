@@ -9,10 +9,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WonderfulStore.Domain.Entities;
 using WonderfulStore.Domain.Interfaces;
 using WonderfulStore.Domain.Interfaces.Repositories;
 using WonderfulStore.Domain.Interfaces.Services;
+using WonderfulStore.Domain.Interfaces.Specifications;
+using WonderfulStore.Domain.Interfaces.UoW;
 using WonderfulStore.Domain.Services;
+using WonderfulStore.Domain.Specifications.ProductSpecifications;
+using WonderfulStore.Infra.DataAccess;
 using WonderfulStore.Infra.DataAccess.Contexts;
 using WonderfulStore.Infra.DataAccess.Repositories;
 
@@ -34,6 +39,11 @@ namespace WonderfulStore.UI.WebApp
             services.AddScoped<DbContext,WonderfulStoreContext>();
             services.AddScoped<IProductRepository, ProductSqlServerRepository>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            //ProductSpecifications
+            services.AddScoped<IEnumerable<IProductSpecification>,
+                List<IProductSpecification> { IsNotOutOfStockProduct }>
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
