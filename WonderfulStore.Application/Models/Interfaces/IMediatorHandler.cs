@@ -6,6 +6,6 @@ namespace WonderfulStore.Application.Models.Interfaces
 {
     public interface IMediatorHandler
     {
-        bool SendCommand<T>(T command, string queueName);
+        bool Enqueue<T>(T command, string queueName);
     }
 }

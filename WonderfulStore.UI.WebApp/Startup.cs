@@ -42,8 +42,8 @@ namespace WonderfulStore.UI.WebApp
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //ProductSpecifications
-            services.AddScoped<IEnumerable<IProductSpecification>,
-                List<IProductSpecification> { IsNotOutOfStockProduct }>
+            services.AddScoped<IEnumerable<IProductSpecification>>(
+                x => new List<IProductSpecification> { new IsNotOutOfStockProduct() });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

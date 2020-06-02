@@ -17,7 +17,7 @@ namespace WonderfulStore.Infra.Messaging
             _connectionString = Resources.ServiceBusConnectionString;
         }
 
-        public bool SendCommand<T>(T command, string queueName)
+        public bool Enqueue<T>(T command, string queueName)
         {
             var message = JsonConvert.SerializeObject(command);
             SendMessageAsync(message, queueName).Wait();

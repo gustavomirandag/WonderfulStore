@@ -1,20 +1,25 @@
-using System;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WonderfulStore.Application;
-using WonderfulStore.Application.Cqrs.Handlers;
-using WonderfulStore.Domain.Services;
+using WonderfulStore.Application.Cqrs.CommandHandlers;
+using WonderfulStore.Application.Cqrs.EventHandlers;
+using WonderfulStore.Application.Interfaces;
+using WonderfulStore.Application.Models.Interfaces;
 using WonderfulStore.Domain.Interfaces.Repositories;
-using WonderfulStore.Infra.DataAccess.Repositories;
-using WonderfulStore.Infra.DataAccess.Contexts;
-using WonderfulStore.Service.ProductWorker.Properties;
+using WonderfulStore.Domain.Interfaces.Services;
+using WonderfulStore.Domain.Interfaces.Specifications;
+using WonderfulStore.Domain.Interfaces.UoW;
+using WonderfulStore.Domain.Services;
+using WonderfulStore.Domain.Specifications.ProductSpecifications;
+using WonderfulStore.Domain.Validations;
 using WonderfulStore.Infra.DataAccess;
+using WonderfulStore.Infra.DataAccess.Contexts;
+using WonderfulStore.Infra.DataAccess.Repositories;
+using WonderfulStore.Infra.Messaging;
+using WonderfulStore.Service.ProductWorker.Properties;
 
 namespace WonderfulStore.Service.ProductWorker
 {
@@ -23,16 +28,6 @@ namespace WonderfulStore.Service.ProductWorker
     {
         static async Task Main()
         {
-            //Fake Dependency Injection
-            var wonderfulStoreContext = new WonderfulStoreContext();
-            Functions.ProductWorkerApp =
-                new ProductWorkerApp(
-                    new ProductCommandHandler(
-                        new ProductService(
-                            new UnitOfWork(wonderfulStoreContext),
-                            new ProductSqlServerRepository(
-                                wonderfulStoreContext)
-                            )));
             var builder = new HostBuilder();
             builder.ConfigureWebJobs(b =>
             {
@@ -43,6 +38,16 @@ namespace WonderfulStore.Service.ProductWorker
                     sbOptions.MessageHandlerOptions.AutoComplete = true;
                     sbOptions.MessageHandlerOptions.MaxConcurrentCalls = 16;
                 });
+            }).ConfigureServices(services =>
+            {
+                services.AddSingleton<IMediatorHandler,AzureServiceBusQueue>();
+                services.AddSingleton<IProductRepository, ProductSqlServerRepository>();
+                services.AddSingleton<DbContext, WonderfulStoreContext>();
+                services.AddSingleton<IUnitOfWork, UnitOfWork>();
+                services.AddSingleton<IProductService, ProductService>();
+                services.AddSingleton<IProductCommandHandler, ProductCommandHandler>();
+                services.AddSingleton<IProductEventHandler, ProductEventHandler>();
+                services.AddSingleton<IProductWorkerApp, ProductWorkerApp>();
             });
             var host = builder.Build();
             using (host)
@@ -51,6 +56,4 @@ namespace WonderfulStore.Service.ProductWorker
             }
         }
     }
-
-
 }

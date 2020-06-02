@@ -2,26 +2,50 @@
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WonderfulStore.Application.Cqrs.Commands;
+using WonderfulStore.Application.Cqrs.EventHandlers;
+using WonderfulStore.Application.Cqrs.Events;
 using WonderfulStore.Application.Interfaces;
+using WonderfulStore.Application.Models.Interfaces;
 
 namespace WonderfulStore.Service.ProductWorker
 {
     public class Functions
     {
-        public static IProductWorkerApp ProductWorkerApp { get; set; }
+        public readonly IProductWorkerApp _productWorkerApp;
+        public readonly IProductEventHandler _eventHandler;
 
-        public static void ProcessAddProductCommand([ServiceBusTrigger(AddProductCommand.CommandQueueName)] string message, ILogger logger)
+        public Functions(IProductWorkerApp productWorkerApp, IProductEventHandler eventHandler)
+        {
+            _productWorkerApp = productWorkerApp;
+            _eventHandler = eventHandler;
+        }
+
+        public void ProcessAddProductCommand([ServiceBusTrigger(AddProductCommand.CommandQueueName)] string message, ILogger logger)
         {
             logger.LogInformation(message);
             var command = JsonConvert.DeserializeObject<AddProductCommand>(message);
-            ProductWorkerApp.AddProduct(command);
+            _productWorkerApp.AddProduct(command);
         }
 
-        public static void ProcessUpdateProductCommand([ServiceBusTrigger(UpdateProductCommand.CommandQueueName)] string message, ILogger logger)
+        public void ProcessUpdateProductCommand([ServiceBusTrigger(UpdateProductCommand.CommandQueueName)] string message, ILogger logger)
         {
             logger.LogInformation(message);
             var command = JsonConvert.DeserializeObject<UpdateProductCommand>(message);
-            ProductWorkerApp.UpdateProduct(command);
+            _productWorkerApp.UpdateProduct(command);
+        }
+
+        public void ProcessProductAddedEvent([ServiceBusTrigger(ProductAddedEvent.EventQueueName)] string message, ILogger logger)
+        {
+            logger.LogInformation(message);
+            var domainEvent = JsonConvert.DeserializeObject<ProductAddedEvent>(message);
+            _eventHandler.Handle(domainEvent);
+        }
+
+        public void ProcessProductUpdatedEvent([ServiceBusTrigger(ProductUpdatedEvent.EventQueueName)] string message, ILogger logger)
+        {
+            logger.LogInformation(message);
+            var domainEvent = JsonConvert.DeserializeObject<ProductUpdatedEvent>(message);
+            _eventHandler.Handle(domainEvent);
         }
     }
 }

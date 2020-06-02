@@ -21,12 +21,12 @@ namespace WonderfulStore.Application
         //############## COMMANDS ################
         public void AddProduct(Product product)
         {
-            _bus.SendCommand<AddProductCommand>(new AddProductCommand { Product = product }, AddProductCommand.CommandQueueName);
+            _bus.Enqueue<AddProductCommand>(new AddProductCommand { Product = product }, AddProductCommand.CommandQueueName);
         }
 
         public void UpdateProduct(Product product)
         {
-            _bus.SendCommand<UpdateProductCommand>(new UpdateProductCommand { Product = product }, UpdateProductCommand.CommandQueueName);
+            _bus.Enqueue<UpdateProductCommand>(new UpdateProductCommand { Product = product }, UpdateProductCommand.CommandQueueName);
         }
         //########################################
 

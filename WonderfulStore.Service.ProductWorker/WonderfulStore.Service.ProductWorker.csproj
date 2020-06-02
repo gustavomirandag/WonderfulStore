@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WonderfulStore.Application\WonderfulStore.Application.csproj" />
     <ProjectReference Include="..\WonderfulStore.Infra.DataAccess\WonderfulStore.Infra.DataAccess.csproj" />
+    <ProjectReference Include="..\WonderfulStore.Infra.Messaging\WonderfulStore.Infra.Messaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

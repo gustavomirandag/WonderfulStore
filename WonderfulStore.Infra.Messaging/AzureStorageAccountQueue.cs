@@ -7,7 +7,7 @@ namespace WonderfulStore.Infra.Messaging
 {
     public class AzureStorageAccountQueue : IMediatorHandler
     {
-        public bool SendCommand<T>(T command, string queueName)
+        public bool Enqueue<T>(T command, string queueName)
         {
             throw new NotImplementedException();
         }
